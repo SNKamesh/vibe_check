@@ -5,3 +5,6 @@
 .progress-track{height:8px;background:#363342;border-radius:20px;overflow:hidden}
 .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#8b72e9,#d0bfff);border-radius:20px;transition:width .18s ease}
 #progress-detail{font-size:10px;color:#9693a5;margin-top:8px;line-height:1.4}
+
+.try-item{width:100%;margin-top:7px;padding:8px;border:0;border-radius:7px;background:#c4b5fd;color:#17131f;font-weight:750;cursor:pointer;font-size:11px}
+.try-item:hover{filter:brightness(1.08)}
