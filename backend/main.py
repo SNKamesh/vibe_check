@@ -75,6 +75,7 @@ def try_on(body: TryOnRequest):
                         "category": body.category,
                         "steps": 30,
                         "seed": 42,
+                        "force_dc": body.category == "dresses",
                     },
                 )
             if hasattr(result, "read"):
@@ -84,7 +85,7 @@ def try_on(body: TryOnRequest):
             else:
                 raise RuntimeError("Unexpected model output type.")
             encoded = base64.b64encode(output_bytes).decode("ascii")
-            return {"image": f"data:image/png;base64,{encoded}", "model": MODEL}
+            return {"image": f"data:image/jpeg;base64,{encoded}", "model": MODEL}
         except Exception as exc:
             message = str(exc)
             if "401" in message or "Unauthenticated" in message:
