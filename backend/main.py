@@ -8,6 +8,8 @@ from typing import Literal
 import replicate
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -91,3 +93,13 @@ def try_on(body: TryOnRequest):
             if "401" in message or "Unauthenticated" in message:
                 raise HTTPException(502, "Replicate rejected the API token. Check backend/.env.")
             raise HTTPException(502, f"AI inference failed: {message[:500]}")
+
+
+# Serve the browser-based live dressing room from the same local origin.
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+if FRONTEND_DIR.is_dir():
+    app.mount("/dressing-room", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="dressing-room")
+
+@app.get("/", include_in_schema=False)
+def home():
+    return RedirectResponse(url="/dressing-room/")
