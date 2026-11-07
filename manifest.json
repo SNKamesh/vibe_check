@@ -4,11 +4,13 @@
   "version": "0.4.0",
   "description": "Open a local-first virtual dressing room directly from Chrome.",
   "action": {
-    "default_popup": "popup.html",
     "default_title": "Open Vibe Check Live Dressing Room"
   },
   "permissions": [],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "background": {
+    "service_worker": "background.js"
   }
 }
