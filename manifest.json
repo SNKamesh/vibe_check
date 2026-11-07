@@ -1,18 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Vibe Check — AI Virtual Try-On",
-  "version": "0.2.0",
-  "description": "Generate realistic virtual try-on photos from your photo and a clothing image.",
+  "name": "Vibe Check — Live Virtual Dressing Room",
+  "version": "0.3.0",
+  "description": "A local-first live virtual dressing room with webcam pose tracking and a personal wardrobe.",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Vibe Check AI Try-On"
+    "default_title": "Open Vibe Check Dressing Room"
   },
-  "permissions": [
-    "storage"
-  ],
+  "permissions": [],
   "host_permissions": [
     "http://127.0.0.1/*",
-    "http://localhost/*",
-    "https://*/*"
+    "http://localhost/*"
   ]
 }
