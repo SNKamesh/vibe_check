@@ -1,1 +1,4 @@
-document.querySelector("#open").addEventListener("click",()=>{chrome.tabs.create({url:"http://127.0.0.1:8000/dressing-room/"});window.close();});
+document.querySelector("#open").addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("frontend/index.html") });
+  window.close();
+});
