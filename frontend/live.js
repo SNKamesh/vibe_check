@@ -204,6 +204,15 @@ function drawFit(img, category, landmarks) {
   if (category === "tops") {
     a = point(landmarks, 11); b = point(landmarks, 12);
     c = point(landmarks, 24); d = point(landmarks, 23);
+    if (!c || !d) {
+      const shoulderMidY = a && b ? (a.y + b.y) / 2 : 0;
+      const shoulderWidth = a && b ? Math.hypot(b.x - a.x, b.y - a.y) : 0;
+      if (a && b && shoulderWidth > 0) {
+        const fallbackY = shoulderMidY + shoulderWidth * 1.45;
+        c = { x: a.x, y: fallbackY };
+        d = { x: b.x, y: fallbackY };
+      }
+    }
   } else if (category === "bottoms") {
     a = point(landmarks, 23); b = point(landmarks, 24);
     c = point(landmarks, 28); d = point(landmarks, 27);
