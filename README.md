@@ -1,35 +1,32 @@
-# Vibe Check — Live Virtual Dressing Room
+# Vibe Check — Local Chrome Extension
 
-Vibe Check is a local-first Chrome extension prototype. Clicking the extension opens a full-screen dressing room served by the local FastAPI process.
+Vibe Check opens as a Chrome extension page. It does not require a Python server or an always-open PowerShell window.
 
-## Current live prototype
+## One-time setup
 
-- Webcam access through the browser.
-- MediaPipe Pose Landmarker runs in the browser (no Replicate inference or per-image API charge).
-- Five-second front-facing calibration.
-- Multiple wardrobe image uploads and local category suggestions.
-- Manual category correction.
-- Live 2D garment overlays anchored to tracked body landmarks.
+1. Extract this repository ZIP to a permanent folder.
+2. Double-click `setup-extension.bat` once. It downloads the MediaPipe Vision JS/WASM runtime and the Pose Landmarker model into the extension folder.
+3. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the folder containing `manifest.json`.
+4. Pin Vibe Check. Click its toolbar icon → **Open live dressing room**.
+5. Allow camera access.
 
-## Run on Windows
+After setup, open the dressing room from the extension icon. No Python server or PowerShell window is needed for normal use.
 
-1. Start the local server from the `backend` folder:
+## What runs locally
 
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
-```
+- Camera capture through Chrome.
+- MediaPipe Pose Landmarker inference in the browser.
+- Five-second pose calibration.
+- Multiple wardrobe image uploads and simple local filename-based category suggestions.
+- 2D garment overlays that follow pose landmarks.
+- No camera frames or wardrobe images are sent to an AI inference API by this extension.
 
-2. Open `chrome://extensions`, enable Developer mode, and load this repository folder (the one containing `manifest.json`).
-3. Click Vibe Check → **Open live dressing room**.
-4. Allow camera access. The first launch needs internet to download the MediaPipe JavaScript/WASM and pose model. Pose inference runs in the browser after loading.
-5. Stand far enough back to show your full body, calibrate, upload clothing images, and select an item.
+The first setup downloads dependencies. The camera pose model and the MediaPipe runtime are stored in the extension folder and reused locally.
 
-## Important limitations
+## Current limitations
 
-This is a first live-AR foundation, not a photorealistic virtual fitting system. Garment overlays are 2D images scaled/rotated to body landmarks; they do not yet perform cloth simulation, body occlusion, realistic fabric deformation, automatic background removal, or accurate fit prediction. Category suggestions currently use local filename hints and are user-correctable, not a trained visual garment classifier. Best results require transparent-background garment PNGs. The wardrobe is currently held in the open tab and is not yet persisted between sessions.
+This is a basic local AR fitting prototype, not a photorealistic generative try-on system. Garment images are overlaid as 2D images aligned to landmarks. It does not yet remove product-photo backgrounds, segment garments, simulate fabric, model body occlusion, or automatically identify apparel visually. Transparent-background garment PNGs give the cleanest current results. Wardrobe items are currently held in the dressing-room tab's memory and will need to be re-added when that tab is closed.
 
-The page uses MediaPipe Tasks Vision from jsDelivr and downloads the pose model from Google-hosted model storage on first use. No camera frames or wardrobe images are uploaded to a cloud inference API by this implementation. Camera permission is controlled by Chrome.
+## Third-party runtime
 
-## Legacy photo backend
-
-The previous Replicate/IDM-VTON API route and requirements remain in `backend` for reference, but the live dressing-room flow does not call it. IDM-VTON has a non-commercial model licence; review licensing before any commercial use.
+The setup script downloads MediaPipe Tasks Vision 0.10.14 (Apache-2.0) and the MediaPipe Pose Landmarker Lite model from Google's hosted model storage. See `THIRD_PARTY_NOTICES.md`.
