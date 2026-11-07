@@ -1,44 +1,5 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vibe Check — AI Try-On</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vibe Check</title>
 <style>
-:root{color-scheme:dark;font:14px Inter,system-ui,sans-serif;background:#101114;color:#f4f4f5}
-*{box-sizing:border-box}body{margin:0;padding:16px;width:460px;min-height:650px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-h1{font-size:19px;margin:0}.tag{font-size:10px;color:#c4b5fd;border:1px solid #55447d;padding:5px 8px;border-radius:20px}
-p{color:#a1a1aa;font-size:12px;line-height:1.5;margin:6px 0 14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.drop{height:160px;border:1px dashed #555762;border-radius:12px;background:#1b1d22;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;overflow:hidden;position:relative}
-.drop strong{font-size:12px}.drop span{font-size:11px;color:#9b9ba5}.drop img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:#18191d}
-.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-select,input[type=text]{background:#202127;border:1px solid #3a3b43;border-radius:8px;color:#eee;padding:10px;width:100%;margin-top:6px}
-label.field{display:block;font-size:11px;color:#aaa;margin-top:12px}
-button{width:100%;border:0;border-radius:9px;padding:12px;background:#c4b5fd;color:#17131f;font-weight:750;cursor:pointer;margin-top:14px}
-button:disabled{opacity:.45;cursor:wait}
-#status{font-size:12px;color:#bdbdc6;min-height:18px;margin:12px 2px}
-#result{display:none;margin-top:12px;background:#1b1d22;border-radius:12px;padding:10px}
-#result img{display:block;width:100%;max-height:440px;object-fit:contain;border-radius:8px}
-.actions{display:flex;gap:8px}.actions a{display:block;text-align:center;flex:1;background:#292b32;color:#eee;text-decoration:none;padding:10px;border-radius:8px;margin-top:8px;font-size:12px}
-.note{font-size:10px;color:#858590;line-height:1.45;margin-top:12px}
-</style></head>
-<body>
-<header><h1>Vibe Check <span style="color:#a78bfa">/ AI Try-On</span></h1><span class="tag">PHOTO MODE</span></header>
-<p>Upload a clear photo of yourself and one garment image. The AI generates a new try-on photo — it does not edit a live video.</p>
-<div class="grid">
-<label class="drop" id="personDrop"><strong>＋ Your photo</strong><span>Full body, front-facing</span><input id="person" type="file" accept="image/*" required></label>
-<label class="drop" id="clothDrop"><strong>＋ Clothing image</strong><span>One garment, clearly visible</span><input id="cloth" type="file" accept="image/*" required></label>
-</div>
-<label class="field">Garment category
-<select id="category"><option value="upper_body">Top / shirt / jacket</option><option value="lower_body">Pants / skirt / shorts</option><option value="dresses">Dress / full outfit</option></select></label>
-<label class="field">Garment description (helps the model)
-<input id="description" type="text" placeholder="e.g. black oversized cotton T-shirt"></label>
-<label class="field">Backend URL
-<input id="backend" type="text" value="http://127.0.0.1:8000"></label>
-<button id="run">Generate realistic try-on</button>
-<div id="status">Choose both images to begin.</div>
-<div id="result"><img id="output" alt="AI virtual try-on result"><div class="actions"><a id="download" download="vibe-check-tryon.png">Download result</a></div></div>
-<div class="note">Images are sent to your configured backend and the selected AI provider for processing. Use images you have permission to process. This prototype uses IDM-VTON through Replicate; its published model license is non-commercial (CC BY-NC-SA 4.0). Not suitable for commercial launch without resolving licensing.</div>
-<script src="app.js"></script>
-</body></html>
+*{box-sizing:border-box}body{margin:0;width:320px;padding:22px;background:#101116;color:#f5f3ff;font:14px Inter,system-ui,sans-serif}h1{font-size:22px;margin:0 0 8px}h1 span{color:#b69cff}p{color:#aaa9b7;line-height:1.55;font-size:12px}button{width:100%;padding:13px;border:0;border-radius:10px;background:#c4b5fd;color:#17131f;font-weight:800;font-size:14px;cursor:pointer;margin-top:12px}.sub{font-size:11px;color:#777887;margin-top:14px}
+</style></head><body><h1>Vibe Check <span>Live</span></h1><p>Your personal virtual dressing room. Open the live camera, calibrate your body, and try on items from your wardrobe.</p><button id="open">Open live dressing room ↗</button><div class="sub">Local camera tracking · No per-try-on API charge</div><script src="launch.js"></script></body></html>
