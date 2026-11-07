@@ -1,17 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Vibe Check — Live Try-On",
-  "version": "0.1.0",
-  "description": "A lightweight webcam clothing overlay prototype.",
+  "name": "Vibe Check — AI Virtual Try-On",
+  "version": "0.2.0",
+  "description": "Generate realistic virtual try-on photos from your photo and a clothing image.",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Vibe Check Try-On"
+    "default_title": "Vibe Check AI Try-On"
   },
   "permissions": [
-    "clipboardRead"
+    "storage"
   ],
   "host_permissions": [
-    "https://cdn.jsdelivr.net/*"
-  ],
-  "icons": {}
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://*/*"
+  ]
 }
