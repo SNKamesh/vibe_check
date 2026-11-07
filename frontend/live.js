@@ -1,4 +1,5 @@
-import { FilesetResolver, PoseLandmarker } from "./vendor/mediapipe/vision_bundle.mjs";
+let FilesetResolver = null;
+let PoseLandmarker = null;
 
 const video = document.querySelector("#camera");
 const canvas = document.querySelector("#overlay");
@@ -260,6 +261,13 @@ async function setupModel() {
   if (landmarker) return;
   hint.textContent = "Loading the on-device pose tracking model…";
   setProgress(0, "Loading body-tracking model", "First launch downloads the browser model. It runs locally after loading.");
+  try {
+    const mediaPipe = await import("./vendor/mediapipe/vision_bundle.mjs");
+    FilesetResolver = mediaPipe.FilesetResolver;
+    PoseLandmarker = mediaPipe.PoseLandmarker;
+  } catch (error) {
+    throw new Error("Local tracking files are missing. Run setup-extension.bat in the extracted Vibe Check folder once, then reload the extension. Details: " + error.message);
+  }
   const wasmRoot = new URL("./vendor/mediapipe/wasm/", import.meta.url).href;
   const vision = await FilesetResolver.forVisionTasks(wasmRoot);
   landmarker = await PoseLandmarker.createFromOptions(vision, {
@@ -297,9 +305,10 @@ async function startCamera() {
     loop();
   } catch (error) {
     startBtn.disabled = false;
-    hint.textContent = "Could not start camera/model: " + error.message + ". Check camera permission and internet access for the first model download.";
+    hint.textContent = "Could not start camera/model: " + error.message;
     stateEl.textContent = "Camera unavailable";
     setProgress(0, "Camera setup failed", error.message);
+    console.error("Vibe Check startup error:", error);
   }
 }
 
