@@ -1,40 +1,44 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vibe Check — Live Try-On</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vibe Check — AI Try-On</title>
 <style>
 :root{color-scheme:dark;font:14px Inter,system-ui,sans-serif;background:#101114;color:#f4f4f5}
-*{box-sizing:border-box}body{margin:0;padding:16px;width:440px;min-height:620px}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-h1{font-size:18px;margin:0}.tag{font-size:11px;color:#a1a1aa;border:1px solid #333;padding:4px 8px;border-radius:20px}
-#stage{position:relative;width:100%;aspect-ratio:4/5;background:#202228;border-radius:14px;overflow:hidden}
-video,canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-#empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:#a1a1aa}
-.controls{display:flex;gap:8px;margin-top:12px}.controls button,.upload{border:0;border-radius:9px;padding:10px 13px;background:#e5e7eb;color:#111;font-weight:650;cursor:pointer}
-.controls button.secondary{background:#292b32;color:#eee}.upload{display:block;text-align:center;flex:1}
-input[type=file]{display:none}
-#status{font-size:12px;color:#a1a1aa;margin:10px 2px;min-height:16px}
-#garment{display:flex;align-items:center;gap:10px;background:#1b1d22;padding:8px;border-radius:10px;margin-top:10px}
-#thumb{width:48px;height:48px;object-fit:contain;background:#292b32;border-radius:7px}
-.hint{font-size:11px;line-height:1.45;color:#92939c;margin-top:10px}
-</style>
-</head>
+*{box-sizing:border-box}body{margin:0;padding:16px;width:460px;min-height:650px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+h1{font-size:19px;margin:0}.tag{font-size:10px;color:#c4b5fd;border:1px solid #55447d;padding:5px 8px;border-radius:20px}
+p{color:#a1a1aa;font-size:12px;line-height:1.5;margin:6px 0 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.drop{height:160px;border:1px dashed #555762;border-radius:12px;background:#1b1d22;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;overflow:hidden;position:relative}
+.drop strong{font-size:12px}.drop span{font-size:11px;color:#9b9ba5}.drop img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:#18191d}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+select,input[type=text]{background:#202127;border:1px solid #3a3b43;border-radius:8px;color:#eee;padding:10px;width:100%;margin-top:6px}
+label.field{display:block;font-size:11px;color:#aaa;margin-top:12px}
+button{width:100%;border:0;border-radius:9px;padding:12px;background:#c4b5fd;color:#17131f;font-weight:750;cursor:pointer;margin-top:14px}
+button:disabled{opacity:.45;cursor:wait}
+#status{font-size:12px;color:#bdbdc6;min-height:18px;margin:12px 2px}
+#result{display:none;margin-top:12px;background:#1b1d22;border-radius:12px;padding:10px}
+#result img{display:block;width:100%;max-height:440px;object-fit:contain;border-radius:8px}
+.actions{display:flex;gap:8px}.actions a{display:block;text-align:center;flex:1;background:#292b32;color:#eee;text-decoration:none;padding:10px;border-radius:8px;margin-top:8px;font-size:12px}
+.note{font-size:10px;color:#858590;line-height:1.45;margin-top:12px}
+</style></head>
 <body>
-<header><h1>Vibe Check <span style="color:#a78bfa">/</span> Try-On</h1><span class="tag">LIVE PROTOTYPE</span></header>
-<div id="stage">
-  <video id="video" autoplay playsinline muted></video>
-  <canvas id="overlay"></canvas>
-  <div id="empty">Start your camera, then paste or drop a clothing image here.</div>
+<header><h1>Vibe Check <span style="color:#a78bfa">/ AI Try-On</span></h1><span class="tag">PHOTO MODE</span></header>
+<p>Upload a clear photo of yourself and one garment image. The AI generates a new try-on photo — it does not edit a live video.</p>
+<div class="grid">
+<label class="drop" id="personDrop"><strong>＋ Your photo</strong><span>Full body, front-facing</span><input id="person" type="file" accept="image/*" required></label>
+<label class="drop" id="clothDrop"><strong>＋ Clothing image</strong><span>One garment, clearly visible</span><input id="cloth" type="file" accept="image/*" required></label>
 </div>
-<div class="controls">
-  <button id="start">Start camera</button>
-  <label class="upload">Choose garment<input id="file" type="file" accept="image/*"></label>
-  <button class="secondary" id="stop">Stop</button>
-</div>
-<div id="garment" hidden><img id="thumb"><div><strong id="gname">Garment loaded</strong><div class="hint">Change the garment any time with Ctrl+V or drag and drop.</div></div></div>
-<div id="status">Camera is off.</div>
-<div class="hint">For this fast prototype, use a single garment on a transparent PNG background. Live pose tracking positions the image on your upper or lower body. This is a tracked overlay, not photorealistic AI fabric synthesis.</div>
-<script type="module" src="app.js"></script>
+<label class="field">Garment category
+<select id="category"><option value="upper_body">Top / shirt / jacket</option><option value="lower_body">Pants / skirt / shorts</option><option value="dresses">Dress / full outfit</option></select></label>
+<label class="field">Garment description (helps the model)
+<input id="description" type="text" placeholder="e.g. black oversized cotton T-shirt"></label>
+<label class="field">Backend URL
+<input id="backend" type="text" value="http://127.0.0.1:8000"></label>
+<button id="run">Generate realistic try-on</button>
+<div id="status">Choose both images to begin.</div>
+<div id="result"><img id="output" alt="AI virtual try-on result"><div class="actions"><a id="download" download="vibe-check-tryon.png">Download result</a></div></div>
+<div class="note">Images are sent to your configured backend and the selected AI provider for processing. Use images you have permission to process. This prototype uses IDM-VTON through Replicate; its published model license is non-commercial (CC BY-NC-SA 4.0). Not suitable for commercial launch without resolving licensing.</div>
+<script src="app.js"></script>
 </body></html>
