@@ -35,3 +35,8 @@ The setup script downloads MediaPipe Tasks Vision 0.10.14 (Apache-2.0) and the M
 ## Device support
 
 Vibe Check is designed for desktop and laptop browsers only (Windows, macOS and Linux). The dressing-room page checks for common mobile and tablet environments and displays a PC-only notice instead of starting the camera. The extension is intended to be loaded unpacked in desktop Chrome or a compatible desktop Chromium browser.
+
+
+## Camera troubleshooting
+
+The app requests webcam permission before initializing the local pose model, so a missing model download is reported as a tracking setup issue rather than a camera failure. If the camera is on but tracking setup fails, run `setup-extension.bat` once. If Chrome blocks camera access, allow it for Vibe Check and enable camera access for desktop apps in Windows Privacy & security settings.
