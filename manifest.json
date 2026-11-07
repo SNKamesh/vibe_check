@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Vibe Check — Live Try-On",
+  "version": "0.1.0",
+  "description": "A lightweight webcam clothing overlay prototype.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Vibe Check Try-On"
+  },
+  "permissions": [
+    "clipboardRead"
+  ],
+  "host_permissions": [
+    "https://cdn.jsdelivr.net/*"
+  ],
+  "icons": {}
+}
