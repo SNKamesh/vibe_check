@@ -30,3 +30,8 @@ This is a basic local AR fitting prototype, not a photorealistic generative try-
 ## Third-party runtime
 
 The setup script downloads MediaPipe Tasks Vision 0.10.14 (Apache-2.0) and the MediaPipe Pose Landmarker Lite model from Google's hosted model storage. See `THIRD_PARTY_NOTICES.md`.
+
+
+## Device support
+
+Vibe Check is designed for desktop and laptop browsers only (Windows, macOS and Linux). The dressing-room page checks for common mobile and tablet environments and displays a PC-only notice instead of starting the camera. The extension is intended to be loaded unpacked in desktop Chrome or a compatible desktop Chromium browser.
