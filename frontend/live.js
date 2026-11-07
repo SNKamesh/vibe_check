@@ -1,4 +1,4 @@
-import { FilesetResolver, PoseLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+import { FilesetResolver, PoseLandmarker } from "./vendor/mediapipe/vision_bundle.mjs";
 
 const video = document.querySelector("#camera");
 const canvas = document.querySelector("#overlay");
@@ -260,10 +260,11 @@ async function setupModel() {
   if (landmarker) return;
   hint.textContent = "Loading the on-device pose tracking model…";
   setProgress(0, "Loading body-tracking model", "First launch downloads the browser model. It runs locally after loading.");
-  const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  const wasmRoot = new URL("./vendor/mediapipe/wasm/", import.meta.url).href;
+  const vision = await FilesetResolver.forVisionTasks(wasmRoot);
   landmarker = await PoseLandmarker.createFromOptions(vision, {
     baseOptions: {
-      modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+      modelAssetPath: new URL("./models/pose_landmarker_lite.task", import.meta.url).href,
       delegate: "GPU"
     },
     runningMode: "VIDEO",
