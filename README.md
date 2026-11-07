@@ -7,7 +7,7 @@ Vibe Check opens as a Chrome extension page. It does not require a Python server
 1. Extract this repository ZIP to a permanent folder.
 2. Double-click `setup-extension.bat` once. It downloads the MediaPipe Vision JS/WASM runtime and the Pose Landmarker model into the extension folder.
 3. Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the folder containing `manifest.json`.
-4. Pin Vibe Check. Click its toolbar icon → **Open live dressing room**.
+4. Pin Vibe Check. Click its toolbar icon once; it opens the dressing room in a new tab.
 5. Allow camera access.
 
 After setup, open the dressing room from the extension icon. No Python server or PowerShell window is needed for normal use.
