@@ -8,3 +8,10 @@
 
 .try-item{width:100%;margin-top:7px;padding:8px;border:0;border-radius:7px;background:#c4b5fd;color:#17131f;font-weight:750;cursor:pointer;font-size:11px}
 .try-item:hover{filter:brightness(1.08)}
+
+.pc-only-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:#0c0d12;color:#f5f3ff;font-family:Inter,system-ui,sans-serif}
+.pc-only-card{max-width:480px;text-align:center;background:#15151d;border:1px solid #343241;border-radius:20px;padding:32px}
+.pc-only-icon{font-size:42px;margin-bottom:14px}
+.pc-only-card h1{margin:0 0 10px;font-size:24px}
+.pc-only-card p{color:#aaa9b7;line-height:1.6;font-size:14px}
+.pc-only-card .pc-only-note{color:#8d8b9a;font-size:12px;margin-top:20px}
