@@ -281,20 +281,42 @@ async function setupModel() {
 }
 
 async function startCamera() {
+  startBtn.disabled = true;
+
   try {
-    startBtn.disabled = true;
-    await setupModel();
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false
-    });
-    stream.getVideoTracks().forEach(track => track.addEventListener("ended", () => {
-      if (stream) stopCamera();
-    }));
-    video.srcObject = stream;
-    await video.play();
-    empty.hidden = true;
-    stopBtn.disabled = false;
+    // Request the webcam first. A missing local pose model must not be reported as a camera failure.
+    if (!stream) {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error("This Chrome page cannot access the camera API. Reload the extension and try desktop Chrome.");
+      }
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false
+      });
+      stream.getVideoTracks().forEach(track => track.addEventListener("ended", () => {
+        if (stream) stopCamera();
+      }));
+      video.srcObject = stream;
+      await video.play();
+      empty.hidden = true;
+      stopBtn.disabled = false;
+      stateEl.textContent = "Camera on · loading tracker";
+    }
+
+    // Tracking is a separate setup step; keep the webcam preview alive if it fails.
+    if (!landmarker) {
+      try {
+        await setupModel();
+      } catch (modelError) {
+        startBtn.disabled = false;
+        stateEl.textContent = "Camera on · tracker setup needed";
+        hint.textContent = modelError.message;
+        setProgress(0, "Camera is working; tracker setup failed", "Run setup-extension.bat once in the extracted Vibe Check folder, then reload the extension. Details: " + modelError.message);
+        return;
+      }
+    }
+
     stateEl.textContent = "Finding body";
     hint.textContent = "Keep your full body in frame. The five-second scan starts when your pose is detected.";
     calibration.hidden = false;
@@ -305,13 +327,22 @@ async function startCamera() {
     loop();
   } catch (error) {
     startBtn.disabled = false;
-    hint.textContent = "Could not start camera/model: " + error.message;
-    stateEl.textContent = "Camera unavailable";
-    setProgress(0, "Camera setup failed", error.message);
-    console.error("Vibe Check startup error:", error);
+    stateEl.textContent = stream ? "Camera on · tracking unavailable" : "Camera unavailable";
+
+    let message = error.message || String(error);
+    if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+      message = "Chrome or Windows blocked camera access. Allow camera access for Vibe Check in Chrome, and check Windows Settings → Privacy & security → Camera → Let desktop apps access your camera.";
+    } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+      message = "No webcam was found. Connect or enable a camera, then try again.";
+    } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+      message = "The webcam is already in use by another app. Close apps such as Camera, Teams or Zoom, then retry.";
+    }
+
+    hint.textContent = message;
+    setProgress(0, stream ? "Camera on · setup problem" : "Camera access failed", message);
+    console.error("Vibe Check camera/tracker startup error:", error);
   }
 }
-
 function loop() {
   if (!stream) return;
   if (video.readyState >= 2 && video.currentTime !== lastVideoTime) {
