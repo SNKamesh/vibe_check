@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Vibe Check — Local Live Dressing Room",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Desktop-only local-first live virtual dressing room for Chrome.",
   "action": {
     "default_title": "Open Vibe Check Live Dressing Room"
